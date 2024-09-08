@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Job Listings{% endblock %}
+
+{% block content %}
+    <h1>Job Listings{% if category %} in {{ category }}{% endif %}</h1>
+    
+    <!-- Category sidebar -->
+    <div class="categories">
+        <h2>Categories</h2>
+        <ul>
+            <li><a href="{{ url_for('index') }}">All Categories</a></li>
+            {% for cat in categories %}
+                <li><a href="{{ url_for('category_jobs', category=cat) }}">{{ cat }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- List of job listings -->
+    <ul class="job-list">
+        {% for job in jobs %}
+            <li class="job-card">
+                <a href="{{ url_for('job_listing', job_id=job.webindex) }}">
+                    <h2>{{ job.title }}</h2>
+                    <p class="company">{{ job.company }}</p>
+                    <p class="category-tag">{{ job.category }}</p>
+                    {% if job.processed_description %}
+                        <!-- Show first 100 characters of job description -->
+                        <p class="job-preview">{{ job.processed_description[:100] }}...</p>
+                    {% else %}
+                        <p class="job-preview">No description available</p>
+                    {% endif %}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Post a Job{% endblock %}
+
+{% block content %}
+    <h1>Post a New Job</h1>
+    <form id="jobForm" method="post">
+        <!-- Job title input -->
+        <div>
+            <label for="title">Job Title:</label>
+            <input type="text" name="title" id="title" required>
+        </div>
+        <!-- Company input -->
+        <div>
+            <label for="company">Company:</label>
+            <input type="text" name="company" id="company" required>
+        </div>
+        <!-- Job description textarea -->
+        <div>
+            <label for="description">Job Description:</label>
+            <textarea name="description" id="description" required></textarea>
+        </div>
+
+        <!-- Category selection dropdown -->
+        <div>
+            <label for="category">Category:</label>
+            <select name="category" id="category">
+                <option value="">Loading...</option>
+                {% for category in categories %}
+                <option value="{{ category }}">{{ category }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Manual category selection checkbox -->
+        <div>
+            <label for="manualCategory">Choose category manually:</label>
+            <input type="checkbox" id="manualCategory">
+        </div>
+
+        <button type="submit">Post Job</button>
+    </form>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get DOM elements
+        const titleInput = document.getElementById('title');
+        const companyInput = document.getElementById('company');
+        const descriptionInput = document.getElementById('description');
+        const categorySelect = document.getElementById('category');
+        const manualCategoryCheckbox = document.getElementById('manualCategory');
+
+        // Function to classify job based on input
+        function classifyJob() {
+            if (titleInput.value && companyInput.value && descriptionInput.value && !manualCategoryCheckbox.checked) {
+                fetch('/classify', {
+                    method: 'POST',
+                    body: new FormData(document.getElementById('jobForm'))
+                })
+                .then(response => response.text())
+                .then(category => {
+                    categorySelect.value = category;
+                });
+            }
+        }
+
+        // Add event listeners for input fields
+        [titleInput, companyInput, descriptionInput].forEach(input => {
+            input.addEventListener('blur', classifyJob);
+        });
+
+        // Add event listener for manual category checkbox
+        manualCategoryCheckbox.addEventListener('change', function() {
+            categorySelect.disabled = !this.checked;
+            if (!this.checked) {
+                classifyJob();
+            }
+        });
+
+        // Set initial state of category select
+        categorySelect.disabled = !manualCategoryCheckbox.checked;
+    });
+    </script>
+{% endblock %}

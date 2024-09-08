@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Job Hunting Website{% endblock %}</title>
+    <!-- Link to CSS file -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <!-- Navigation links -->
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('post_job') }}">Post a Job</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <!-- Display flash messages -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        <!-- Content block for child templates -->
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+        <p>&copy; 2023 Job Hunting Website</p>
+    </footer>
+    <!-- Link to JavaScript file -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
