@@ -74,6 +74,11 @@ jobs = load_preprocessed_data(preprocessed_file)
 saved_jobs = load_jobs_from_file(saved_jobs_file)
 jobs.extend(saved_jobs)  # Combine preprocessed and saved jobs
 
+# Add this new function to update the jobs list
+def update_jobs_list(new_job):
+    global jobs
+    jobs.append(new_job)
+
 @app.route('/')
 def index():
     """Render the home page with all job listings and categories."""
@@ -87,20 +92,12 @@ def job_listing(job_id):
     if job is None:
         return "Job not found", 404
 
-    # Ensure all required fields are present with default values
-    default_fields = {
-        'title': 'No Title',
-        'company': 'No Company',
-        'category': 'Uncategorized',
-        'description': 'No description available.'
-    }
-
-    # Use the actual job data, falling back to defaults if necessary
+    # Use the actual job data without any modifications
     job_data = {
-        'title': job.get('title', default_fields['title']),
-        'company': job.get('company', default_fields['company']),
-        'category': job.get('category', default_fields['category']),
-        'description': job.get('description') or job.get('processed_description', default_fields['description'])
+        'title': job.get('title', 'No Title'),
+        'company': job.get('company', 'No Company'),
+        'category': job.get('category', 'Uncategorized'),
+        'description': job.get('description', 'No description available.')
     }
 
     return render_template('job_listing.html', job=job_data)
@@ -116,6 +113,8 @@ def category_jobs(category):
 @app.route('/post_job', methods=['GET', 'POST'])
 def post_job():
     """Handle job posting (both form display and submission)."""
+    categories = list(set(job['category'] for job in jobs))
+    
     if request.method == 'POST':
         new_job = {
             'title': request.form['title'],
@@ -125,21 +124,20 @@ def post_job():
             'processed_description': preprocess_text(request.form['description'])
         }
 
-        suggested_category = classify_job(new_job['processed_description'])
-        if suggested_category.startswith("Unable to classify"):
-            flash(f"Error: {suggested_category}", 'error')
-            categories = list(set(job['category'] for job in jobs))
-            return render_template('post_job.html', categories=categories, job=new_job)
+        if 'category' in request.form and request.form['category']:
+            new_job['category'] = request.form['category']
+        else:
+            suggested_category = classify_job(new_job['processed_description'])
+            if suggested_category.startswith("Unable to classify"):
+                return render_template('post_job.html', categories=categories, job=new_job, error=suggested_category)
+            new_job['category'] = suggested_category
 
-        new_job['category'] = request.form.get('category', suggested_category)
-
-        jobs.append(new_job)
+        update_jobs_list(new_job)  # Update the jobs list
         save_jobs_to_file(saved_jobs + [new_job], saved_jobs_file)
     
-        return redirect(url_for('job_listing', job_id=int(new_job['webindex'])))
+        return render_template('post_job.html', categories=categories, job=new_job, success="Job successfully posted!")
 
-    categories = list(set(job['category'] for job in jobs))
-    return render_template('post_job.html', categories=categories)
+    return render_template('post_job.html', categories=categories, job={})
 
 @app.route('/classify', methods=['POST'])
 def classify():

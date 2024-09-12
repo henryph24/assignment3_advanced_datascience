@@ -102,5 +102,45 @@
     "description": "maintain electrical grid",
     "processed_description": "maintain electrical grid",
     "category": "Engineering"
+  },
+  {
+    "title": "staff nurse",
+    "company": "rmit healthcare",
+    "webindex": "790",
+    "description": "take care of student health",
+    "processed_description": "care student health",
+    "category": "Healthcare_Nursing"
+  },
+  {
+    "title": "admission consultant",
+    "company": "rmit",
+    "webindex": "792",
+    "description": "recruit new students",
+    "processed_description": "recruit students",
+    "category": "Sales"
+  },
+  {
+    "title": "nurse",
+    "company": "health",
+    "webindex": "793",
+    "description": "take care of student health",
+    "processed_description": "care student health",
+    "category": "Healthcare_Nursing"
+  },
+  {
+    "title": "pro nurse",
+    "company": "healthx",
+    "webindex": "793",
+    "description": "take care of patient",
+    "processed_description": "care patient",
+    "category": "Healthcare_Nursing"
+  },
+  {
+    "title": "student specialist",
+    "company": "rmit",
+    "webindex": "798",
+    "description": "recruit new students",
+    "processed_description": "recruit students",
+    "category": "Sales"
   }
 ]
