@@ -142,5 +142,21 @@
     "description": "recruit new students",
     "processed_description": "recruit students",
     "category": "Sales"
+  },
+  {
+    "title": "entry nurse",
+    "company": "rmit health",
+    "webindex": "795",
+    "description": "take care of elderly",
+    "processed_description": "care elderly",
+    "category": "Healthcare_Nursing"
+  },
+  {
+    "title": "senior admission recruiter",
+    "company": "rmit admission",
+    "webindex": "801",
+    "description": "recruit new students",
+    "processed_description": "recruit students",
+    "category": "Sales"
   }
 ]

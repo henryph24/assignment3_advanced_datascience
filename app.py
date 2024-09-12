@@ -92,12 +92,12 @@ def job_listing(job_id):
     if job is None:
         return "Job not found", 404
 
-    # Use the actual job data without any modifications
+    # Use the actual job data, prioritizing 'description' over 'processed_description'
     job_data = {
         'title': job.get('title', 'No Title'),
         'company': job.get('company', 'No Company'),
         'category': job.get('category', 'Uncategorized'),
-        'description': job.get('description', 'No description available.')
+        'description': job.get('description') or job.get('processed_description') or 'No description available.'
     }
 
     return render_template('job_listing.html', job=job_data)
