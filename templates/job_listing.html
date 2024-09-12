@@ -1,18 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}{{ job.title }}{% endblock %}
+{% block title %}{{ job.title }} - Job Listing{% endblock %}
 
 {% block content %}
-    <!-- Individual job listing details -->
-    <div class="job-details">
-        <h1>{{ job.title }}</h1>
-        <p class="company">{{ job.company }}</p>
-        <p class="category-tag">{{ job.category }}</p>
-        <h2>Job Description</h2>
-        {% if job.processed_description %}
-            <p>{{ job.processed_description }}</p>
-        {% else %}
-            <p>No description available</p>
-        {% endif %}
-    </div>
+    <!-- Display job details -->
+    <h1>{{ job.title }}</h1>
+    <h2>{{ job.company }}</h2>
+    <p>Category: {{ job.category }}</p>
+    <h3>Description:</h3>
+    <p>{{ job.description|safe }}</p>
 {% endblock %}

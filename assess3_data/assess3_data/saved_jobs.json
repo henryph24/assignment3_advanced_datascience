@@ -1,0 +1,106 @@
+[
+  {
+    "title": "nurse",
+    "company": "rmit wellbeing",
+    "webindex": "777",
+    "description": "take care of student health",
+    "processed_description": "care student health",
+    "category": "Healthcare_Nursing"
+  },
+  {
+    "title": "on-campus nurse",
+    "company": "rmit wellbeing",
+    "webindex": "778",
+    "description": "take care of student health",
+    "processed_description": "care student health",
+    "category": "Healthcare_Nursing"
+  },
+  {
+    "title": "admission specialist (senior)",
+    "company": "rmit admission",
+    "webindex": "780",
+    "description": "recruit new student",
+    "processed_description": "recruit student",
+    "category": "Sales"
+  },
+  {
+    "title": "engineer",
+    "company": "electrical",
+    "webindex": "781",
+    "description": "monitor and maintain electrical\r\n",
+    "processed_description": "monitor maintain electrical",
+    "category": "Engineering"
+  },
+  {
+    "title": "electrical engineer",
+    "company": "rmit operations",
+    "webindex": "784",
+    "description": "maintain electrical system",
+    "processed_description": "maintain electrical system",
+    "category": "Engineering"
+  },
+  {
+    "title": "admission consultant",
+    "company": "rmit admission",
+    "webindex": "786",
+    "description": "recruit new students and look for prospective students\r\n",
+    "processed_description": "recruit students prospective students",
+    "category": "Sales"
+  },
+  {
+    "title": "nurse on campus",
+    "company": "rmit wellbeing",
+    "webindex": "786",
+    "description": "take care of student health",
+    "processed_description": "care student health",
+    "category": "Healthcare_Nursing"
+  },
+  {
+    "title": "electrical engineer",
+    "company": "rmit operations",
+    "webindex": "784",
+    "description": "maintain grid",
+    "processed_description": "maintain grid",
+    "category": "Engineering"
+  },
+  {
+    "title": "electrician",
+    "company": "rmit infrastructure",
+    "webindex": "785",
+    "description": "maintain internal grid",
+    "processed_description": "maintain internal grid",
+    "category": "Engineering"
+  },
+  {
+    "title": "electrician",
+    "company": "rmit",
+    "webindex": "786",
+    "description": "system",
+    "processed_description": "system",
+    "category": "Engineering"
+  },
+  {
+    "title": "electrician",
+    "company": "rmit",
+    "webindex": "787",
+    "description": "maintain grid",
+    "processed_description": "maintain grid",
+    "category": "Engineering"
+  },
+  {
+    "title": "electrician ",
+    "company": "rmit vietnam operations",
+    "webindex": "788",
+    "description": "maintain internal electrical system",
+    "processed_description": "maintain internal electrical system",
+    "category": "Engineering"
+  },
+  {
+    "title": "senior electrician",
+    "company": "rmit operation division",
+    "webindex": "789",
+    "description": "maintain electrical grid",
+    "processed_description": "maintain electrical grid",
+    "category": "Engineering"
+  }
+]

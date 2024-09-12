@@ -1,0 +1,21 @@
+MilestoneII_s3818070/
+├── assess3_data/
+│
+├── models/
+│   ├── best_model_CatBoostClassifier_Description_Only_-_Count_Vectors.joblib
+│   ├── label_encoder.jobib
+│   ├── preprocessing.py
+│   ├── embeddings.py
+│   └── classifier.py
+│
+├── static/
+│   └── style.css
+│
+├── templates/
+│   ├── base.html
+│   ├── index.html
+│   ├── job_listing.html
+│   ├── post_job.html
+│   └── search_results.html
+│
+└── app.py

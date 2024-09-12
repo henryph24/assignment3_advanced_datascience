@@ -3,38 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Job Hunting Website{% endblock %}</title>
-    <!-- Link to CSS file -->
+    <title>{% block title %}Job Board{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        /* Inline styles for navigation */
+        nav {
+            text-align: center;
+            padding: 20px 0;
+        }
+        nav a {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 0 10px;
+            font-size: 18px;
+            color: white;
+            background-color: #007bff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        nav a:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <nav>
-            <ul>
-                <!-- Navigation links -->
-                <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li><a href="{{ url_for('post_job') }}">Post a Job</a></li>
-            </ul>
-        </nav>
+        <div class="container">
+            <nav>
+                <a href="{{ url_for('index') }}">Home</a>
+                <a href="{{ url_for('post_job') }}">Post a Job</a>
+            </nav>
+        </div>
     </header>
+    {% if request.endpoint == 'index' %}
+    <!-- Search bar only on the index page -->
+    <div class="search-section">
+        <div class="container">
+            <div class="search-bar">
+                <form action="{{ url_for('search') }}" method="get">
+                    <input type="text" name="q" placeholder="Search jobs...">
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
     <main>
-        <!-- Display flash messages -->
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <ul class="flashes">
-                    {% for message in messages %}
-                        <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %}
-        <!-- Content block for child templates -->
-        {% block content %}{% endblock %}
+        <div class="container">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul class="flashes">
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+            {% block content %}{% endblock %}
+        </div>
     </main>
     <footer>
-        <p>&copy; 2023 Job Hunting Website</p>
+        <div class="container">
+            <p>&copy; 2023 Job Hunting Website</p>
+        </div>
     </footer>
-    <!-- Link to JavaScript file -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

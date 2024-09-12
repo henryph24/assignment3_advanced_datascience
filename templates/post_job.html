@@ -5,37 +5,39 @@
 {% block content %}
     <h1>Post a New Job</h1>
     <form id="jobForm" method="post">
-        <!-- Job title input -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
         <div>
             <label for="title">Job Title:</label>
-            <input type="text" name="title" id="title" required>
+            <input type="text" id="title" name="title" required>
         </div>
-        <!-- Company input -->
         <div>
             <label for="company">Company:</label>
-            <input type="text" name="company" id="company" required>
+            <input type="text" id="company" name="company" required>
         </div>
-        <!-- Job description textarea -->
         <div>
             <label for="description">Job Description:</label>
-            <textarea name="description" id="description" required></textarea>
+            <textarea id="description" name="description" required></textarea>
         </div>
 
-        <!-- Category selection dropdown -->
-        <div>
-            <label for="category">Category:</label>
-            <select name="category" id="category">
-                <option value="">Loading...</option>
+        <div style="display: flex; align-items: center;">
+            <label for="category" style="margin-right: 10px;">Category:</label>
+            <select name="category" id="category" style="flex-grow: 1;" disabled>
+                <option value="">Select a category</option>
                 {% for category in categories %}
                 <option value="{{ category }}">{{ category }}</option>
                 {% endfor %}
             </select>
-        </div>
-
-        <!-- Manual category selection checkbox -->
-        <div>
-            <label for="manualCategory">Choose category manually:</label>
-            <input type="checkbox" id="manualCategory">
+            <div style="display: flex; align-items: center; margin-left: 10px;">
+                <input type="checkbox" id="manual-override" name="manual-override" style="margin-right: 5px;">
+                <label for="manual-override">Manual override</label>
+            </div>
         </div>
 
         <button type="submit">Post Job</button>
@@ -43,42 +45,76 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Get DOM elements
+        const form = document.getElementById('jobForm');
         const titleInput = document.getElementById('title');
         const companyInput = document.getElementById('company');
         const descriptionInput = document.getElementById('description');
         const categorySelect = document.getElementById('category');
-        const manualCategoryCheckbox = document.getElementById('manualCategory');
+        const manualOverrideCheckbox = document.getElementById('manual-override');
 
-        // Function to classify job based on input
-        function classifyJob() {
-            if (titleInput.value && companyInput.value && descriptionInput.value && !manualCategoryCheckbox.checked) {
-                fetch('/classify', {
-                    method: 'POST',
-                    body: new FormData(document.getElementById('jobForm'))
-                })
-                .then(response => response.text())
-                .then(category => {
-                    categorySelect.value = category;
-                });
+        let classificationRequested = false;
+
+        function checkAllFieldsFilled() {
+            if (titleInput.value && companyInput.value && descriptionInput.value && !classificationRequested) {
+                classifyJob();
             }
         }
 
-        // Add event listeners for input fields
+        function classifyJob() {
+            classificationRequested = true;
+            categorySelect.disabled = true;
+            categorySelect.innerHTML = '<option value="">Classifying...</option>';
+
+            fetch('/classify', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'description': descriptionInput.value
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error('Classification error:', data.error);
+                    categorySelect.innerHTML = '<option value="">Classification failed</option>';
+                } else {
+                    categorySelect.innerHTML = `
+                        <option value="">Select a category</option>
+                        {% for category in categories %}
+                        <option value="{{ category }}"${data.category === "{{ category }}" ? ' selected' : ''}>{{ category }}</option>
+                        {% endfor %}
+                    `;
+                    // If the classified category is not in the list, add it
+                    if (!Array.from(categorySelect.options).some(option => option.value === data.category)) {
+                        const newOption = new Option(data.category, data.category, true, true);
+                        categorySelect.add(newOption);
+                    }
+                }
+                categorySelect.disabled = !manualOverrideCheckbox.checked;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                categorySelect.innerHTML = '<option value="">Classification failed</option>';
+                categorySelect.disabled = !manualOverrideCheckbox.checked;
+            });
+        }
+
         [titleInput, companyInput, descriptionInput].forEach(input => {
-            input.addEventListener('blur', classifyJob);
+            input.addEventListener('blur', checkAllFieldsFilled);
         });
 
-        // Add event listener for manual category checkbox
-        manualCategoryCheckbox.addEventListener('change', function() {
+        manualOverrideCheckbox.addEventListener('change', function() {
             categorySelect.disabled = !this.checked;
-            if (!this.checked) {
-                classifyJob();
+        });
+
+        form.addEventListener('submit', function(event) {
+            if (categorySelect.value === "" && !manualOverrideCheckbox.checked) {
+                event.preventDefault();
+                alert("Please wait for the category to be classified or select one manually.");
             }
         });
-
-        // Set initial state of category select
-        categorySelect.disabled = !manualCategoryCheckbox.checked;
     });
     </script>
 {% endblock %}
